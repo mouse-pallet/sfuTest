@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  h1= title
+  p Welcome to #{title}
+  .videosContainer
+    video#myStream(autoplay='', muted='true')
+  .myControllerContainer
+    p
+        | Your id:
+        span#my-id ...
+    form#make-call
+        input#join-room(type='text', placeholder='Join room...')
+        button(type='submit') Join
+    #end-call
+        p
+            | Currently in room
+            span#room-id ...
+        button Leave
