@@ -1,8 +1,11 @@
 extends layout
 
 block content
-    .videosContainer
+    link(rel='stylesheet', href='/stylesheets/localStyle.css')
+    .myVideosContainer
       video#myStream(autoplay='', muted='true')
+    .otherVideosContainer
+
     .myControllerContainer
       p
         | Your id:
@@ -38,3 +41,4 @@ block content
         br
         button#generate generate
         button#close Close
+    script(type='text/javascript', src='/javascripts/localVideoChat.js')

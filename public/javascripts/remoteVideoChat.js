@@ -29,7 +29,7 @@ $(function(){
         });
 
     peer = new Peer({
-        key: 'APIKEY',
+        key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
         debug: 3
     });
 
@@ -73,6 +73,8 @@ $(function(){
             .then(function (stream) {
                 $('#myStream').get(0).srcObject = stream;
                 localStream = stream;
+                console.log(localStream);
+                console.log(localStream.onaddtrack);
 
                 if(existingCall){
                     existingCall.replaceStream(stream);
@@ -82,6 +84,7 @@ $(function(){
                 console.error('mediaDevice.getUserMedia() error:', error);
                 return;
             });
+
     }
 
     function setupCallEventHandlers(call){
@@ -94,11 +97,13 @@ $(function(){
         $('#room-id').text(call.name);
 
         call.on('stream', function(stream){
+            console.log("stream.getVideoTracks().length" + stream.getVideoTracks().length);
             addVideo(stream);
         });
 
         call.on('removeStream', function(stream){
             removeVideo(stream.peerId);
+            console.log("work SFURoom Methos removestream.");
         });
 
         call.on('peerLeave', function(peerId){
@@ -117,6 +122,17 @@ $(function(){
         videoDom.attr('id',stream.peerId);
         videoDom.get(0).srcObject = stream;
         $('.videosContainer').append(videoDom);
+        stream.onaddtrack = function(event) {
+            console.log("addtrack");
+            console.log(stream.Id);
+            console.log(stream);
+            console.log(stream.getVideoTracks());
+        };
+        stream.onremovestream = function(event) {
+            console.log("removestream");
+        };
+        console.log("defaut getVideoTracks : ");
+        console.log(stream.getVideoTracks());
     }
 
     function removeVideo(peerId){
