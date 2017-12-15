@@ -132,3 +132,24 @@ video {
 .videosContainer video:first-child:nth-last-child(8) ~ video {
     width: 12.5%;
 }
+
+#overlay {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0, 0, 0, 0.3);
+  display: none;
+  z-index: 1
+ }
+
+#modalWindow {
+  width: 350px;
+  height: 150px;
+  position: fixed;
+  border: 2px solid #D04255;
+  background-color: #FFF;
+  display: none;
+  z-index: 2
+}

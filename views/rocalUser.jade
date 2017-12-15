@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    .videosContainer
+      video#myStream(autoplay='', muted='true')
+    .myControllerContainer
+      p
+        | Your id:
+        span#my-id ...
+      .select
+        label(for='audioSource') Audio input source:
+        select#audioSource
+      .select
+        label(for='videoSource') Video source:
+        select#videoSource
+      form#make-call
+        input#join-room(type='text', placeholder='Join room...')
+        button(type='submit') Join
+      #end-call
+        p
+          | Currently in room
+          span#room-id ...
+        button Leave
+    #overlay
+    #modalWindow
+        .select
+          label(for='addAnotherAudioSource') Audio input source:
+          select#addAnotherAudioSource
+        .select
+          label(for='addAnotherVideoSource') Video source:
+          select#addAnotherVideoSource
+        button#close Close

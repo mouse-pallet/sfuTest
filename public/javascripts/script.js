@@ -4,6 +4,18 @@ $(function(){
     let peer = null;
     let existingCall = null;
 
+    var videoDevices = [];
+
+    navigator.mediaDevices.enumerateDevices()
+    .then(function(devices) {
+    devices.forEach(function(device) {
+        if(device.kind === 'videoinput'){
+            videoDevices.push(device);
+        }
+    });
+
+    console.log(videoDevices);
+
     let constraints = {
         video: {},
         audio: true
@@ -15,6 +27,9 @@ $(function(){
         .then(function (stream) {
             $('#myStream').get(0).srcObject = stream;
             localStream = stream;
+            console.log("local Stream");
+            console.log(stream.getVideoTracks());
+            console.log(stream);
         }).catch(function (error) {
             console.error('mediaDevice.getUserMedia() error:', error);
             return;
@@ -73,12 +88,9 @@ $(function(){
 
     function addVideo(stream){
         const videoDom = $('<video autoplay>');
-        console.log('================');
-        console.log(stream);
-        console.log(videoDom);
-        console.log(videoDom.get(0));
-        console.log('================');
         videoDom.attr('id',stream.peerId);
+        console.log("reciever");
+        console.log(stream.getVideoTracks());
         videoDom.get(0).srcObject = stream;
         $('.videosContainer').append(videoDom);
     }
@@ -100,5 +112,13 @@ $(function(){
         $('#make-call').hide();
         $('#end-call').show();
     }
+
+
+
+
+
+
+    });
+
 
 });
