@@ -146,10 +146,15 @@ video {
 
 #modalWindow {
   width: 350px;
-  height: 150px;
+  height: 400px;
   position: fixed;
   border: 2px solid #D04255;
   background-color: #FFF;
   display: none;
   z-index: 2
+}
+
+#streamPreview {
+  width: 320px;
+  height: 240px;
 }

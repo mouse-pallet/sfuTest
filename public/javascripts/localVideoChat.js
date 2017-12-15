@@ -7,14 +7,25 @@ $(function(){
     var audioSelect = $('#audioSource');
     var videoSelect = $('#videoSource');
 
+    var addAnotherAudioSelect = $('#addAnotherAudioSource');
+    var addAnotherVideoSelect = $('#addAnotherVideoSource');
+    // var $addAnotherAudioSelect_options;
+    // var $addAnotherVideoSelect_options;
+
+
+
     var videoIDs = [];
     var audioIDs = [];
+    var deviceInfos_global = [];
+
 
     //使用可能なvideo・audioデバイスを確認、選択項目に入れる。
     navigator.mediaDevices.enumerateDevices()
         .then(function(deviceInfos) {
             for (var i = 0; i !== deviceInfos.length; ++i) {
                 var deviceInfo = deviceInfos[i];
+                deviceInfos_global.push(deviceInfos[i]);
+
                 var option = $('<option>');
                 option.val(deviceInfo.deviceId);
                 if (deviceInfo.kind === 'audioinput') {
@@ -27,15 +38,26 @@ $(function(){
                     videoIDs .push(deviceInfo);
                 }
             }
+
+            console.log("deviceInfos_global");
+            console.log(deviceInfos_global);
+
             videoSelect.on('change', setupGetUserMedia);
             audioSelect.on('change', setupGetUserMedia);
+
+            // $addAnotherAudioSelect_options = $("#audioSelect > option").clone();
+            // $addAnotherVideoSelect_options = $("#videoSelect > option").clone();
+            // console.log("$addAnotherAudioSelect_options : ");
+            // console.log($addAnotherAudioSelect_options);
+
             setupGetUserMedia();
         }).catch(function (error) {
             console.error('mediaDevices.enumerateDevices() error:', error);
             return;
         });
 
-　//モーダルを画面中央に配置するための下処理
+//モーダル ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  //モーダルを画面中央に配置するための下処理
   locateCenter();
   $(window).resize(locateCenter);
 
@@ -51,7 +73,12 @@ $(function(){
       'top': ((h - ch) / 2) + 'px'
     });
   }
-
+    //モーダルで使うボタンの処理
+    $('#generate').on('click', addStream);
+    $('#close').on('click', function() {
+        $('#overlay, #modalWindow').fadeOut();
+    });
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //peer処理スタート
     peer = new Peer({
         key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
@@ -73,6 +100,7 @@ $(function(){
             return;
         }
         const call = peer.joinRoom(roomName, {mode: 'sfu', stream: localStream});
+        console.log(call);
         setupCallEventHandlers(call);
     });
 
@@ -136,19 +164,86 @@ $(function(){
         });
 
     }
-    $('#close').on('click', function() {
-    $('#overlay, #modalWindow').fadeOut();
-  });
+
+
 
     function addVideo(stream){
+        console.log("getStream : ");
+        console.log(stream.getVideoTracks());
         const videoDom = $('<video autoplay>');
         videoDom.attr('id',stream.peerId);
         videoDom.get(0).srcObject = stream;
         $('.videosContainer').append(videoDom);
         // addActor(stream.id,stream);　//Add Anamorphico
-        // //ダイアログ表示
         // //ダイアログを表示　新しい参加者来ました。どのカメラを提示しますか？（カメラ選択画面とプレビュー,ボタン）
-        $('#overlay, #modalWindow').fadeIn();
+        $('#overlay').fadeIn("fast",function(){
+            $('#modalWindow').fadeIn("fast",function(){
+            console.log("deviceInfos_global");
+            console.log(deviceInfos_global);
+            for (var i = 0; i !== deviceInfos_global .length; ++i) {
+                var deviceInfo = deviceInfos_global [i];
+                var option = $('<option>');
+                option.val(deviceInfo.deviceId);
+                if (deviceInfo.kind === 'audioinput') {
+                    option.text(deviceInfo.label);
+                    addAnotherAudioSelect.append(option);
+                } else if (deviceInfo.kind === 'videoinput') {
+                    option.text(deviceInfo.label);
+                    addAnotherVideoSelect.append(option);
+                }
+            }
+            addAnotherAudioSelect.on('change', deviceChange);
+            addAnotherVideoSelect.on('change', deviceChange);
+        });
+        });
+
+    }
+
+    function deviceChange() {
+        var addAnotherAudioSource = $('#addAnotherAudioSource').val();
+        var addAnotherVideoSource = $('#addAnotherVideoSource').val();
+        var constraints = {
+            audio: {deviceId: {exact: addAnotherAudioSource}},
+            video: {deviceId: {exact: addAnotherVideoSource}}
+        };
+        constraints.video.width = 320;
+        constraints.video.height = 240;
+
+        if(localStream){
+            localStream = null;
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                $('#streamPreview').get(0).srcObject = stream;
+            }).catch(function (error) {
+                console.error('mediaDevice.getUserMedia() error:', error);
+                return;
+            });
+    }
+
+    function addStream(){
+        console.log("addStream");
+
+        var stream = $('#streamPreview').get(0).srcObject;
+        var track = stream.getVideoTracks();
+        $('#streamPreview').get(0).srcObject = null;
+        console.log(track[0]);
+        // localStream.addTrack(track);
+
+        console.log(localStream);
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                $('#streamPreview').get(0).srcObject = stream;
+            }).catch(function (error) {
+                console.error('mediaDevice.getUserMedia() error:', error);
+                return;
+            });
+
+        // if(existingCall){
+        //     existingCall.replaceStream(localStream);
+        // }
     }
 
     function removeVideo(peerId){
