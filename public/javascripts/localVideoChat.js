@@ -9,6 +9,8 @@ $(function(){
 
     var addAnotherAudioSelect = $('#addAnotherAudioSource');
     var addAnotherVideoSelect = $('#addAnotherVideoSource');
+    // var $addAnotherAudioSelect_options;
+    // var $addAnotherVideoSelect_options;
 
 
 
@@ -42,6 +44,11 @@ $(function(){
 
             videoSelect.on('change', setupGetUserMedia);
             audioSelect.on('change', setupGetUserMedia);
+
+            // $addAnotherAudioSelect_options = $("#audioSelect > option").clone();
+            // $addAnotherVideoSelect_options = $("#videoSelect > option").clone();
+            // console.log("$addAnotherAudioSelect_options : ");
+            // console.log($addAnotherAudioSelect_options);
 
             setupGetUserMedia();
         }).catch(function (error) {
@@ -161,19 +168,18 @@ $(function(){
 
 
     function addVideo(stream){
+        console.log("getStream : ");
+        console.log(stream.getVideoTracks());
         const videoDom = $('<video autoplay>');
         videoDom.attr('id',stream.peerId);
         videoDom.get(0).srcObject = stream;
-        $('.otherVideosContainer').append(videoDom);
+        $('.videosContainer').append(videoDom);
         // addActor(stream.id,stream);　//Add Anamorphico
-
-
         // //ダイアログを表示　新しい参加者来ました。どのカメラを提示しますか？（カメラ選択画面とプレビュー,ボタン）
         $('#overlay').fadeIn("fast",function(){
             $('#modalWindow').fadeIn("fast",function(){
-                addAnotherAudioSelect.empty();
-                addAnotherVideoSelect.empty();
-            console.log("deviceInfos_global .length : " + deviceInfos_global .length);
+            console.log("deviceInfos_global");
+            console.log(deviceInfos_global);
             for (var i = 0; i !== deviceInfos_global .length; ++i) {
                 var deviceInfo = deviceInfos_global [i];
                 var option = $('<option>');
@@ -203,6 +209,10 @@ $(function(){
         constraints.video.width = 320;
         constraints.video.height = 240;
 
+        if(localStream){
+            localStream = null;
+        }
+
         navigator.mediaDevices.getUserMedia(constraints)
             .then(function (stream) {
                 $('#streamPreview').get(0).srcObject = stream;
@@ -215,27 +225,25 @@ $(function(){
     function addStream(){
         console.log("addStream");
 
-        const videoDom = $('<video autoplay>');
-        videoDom.get(0).srcObject = $('#streamPreview').get(0).srcObject;
-        $('.myVideosContainer').append(videoDom);
-
         var stream = $('#streamPreview').get(0).srcObject;
-        var audioTrack = stream.getAudioTracks();
-        var videoTrack = stream.getVideoTracks();
+        var track = stream.getVideoTracks();
         $('#streamPreview').get(0).srcObject = null;
-        localStream.addTrack(audioTrack[0]);
-        localStream.addTrack(videoTrack[0]);
-        if(existingCall){
-            existingCall.replaceStream(localStream);
-            $('#overlay, #modalWindow').fadeOut();
-            console.log("modal finish!");
-            console.log(localStream.getAudioTracks());
-            console.log(localStream.getVideoTracks());
-        }
-        else{
-            console.log("couldn't replace");
-            console.log(localStream);
-        }
+        console.log(track[0]);
+        // localStream.addTrack(track);
+
+        console.log(localStream);
+
+        navigator.mediaDevices.getUserMedia(constraints)
+            .then(function (stream) {
+                $('#streamPreview').get(0).srcObject = stream;
+            }).catch(function (error) {
+                console.error('mediaDevice.getUserMedia() error:', error);
+                return;
+            });
+
+        // if(existingCall){
+        //     existingCall.replaceStream(localStream);
+        // }
     }
 
     function removeVideo(peerId){

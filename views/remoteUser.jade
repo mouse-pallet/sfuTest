@@ -1,7 +1,6 @@
 extends layout
 
 block content
-    link(rel='stylesheet', href='/stylesheets/remoteStyle.css')
     .videosContainer
       video#myStream(autoplay='', muted='true')
     .myControllerContainer
@@ -22,6 +21,5 @@ block content
           | Currently in room
           span#room-id ...
         button Leave
-    script(type='text/javascript', src='/javascripts/remoteVideoChat.js')
 
 

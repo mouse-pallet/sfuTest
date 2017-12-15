@@ -5,9 +5,7 @@ html {
     -o-background-size: cover;
     background-size: cover;  }
 
-
-.myVideosContainer,
-.otherVideosContainer{
+.videosContainer {
     position: absolute;
     width: 100%;
     height: 50%;
@@ -91,28 +89,22 @@ video {
     float: left;
 }
 
-.myVideosContainer video, .otherVideosContainer video {
+.videosContainer video {
     height: 100%;
 }
 
-.myVideosContainer video:first-child:nth-last-child(1),
-.otherVideosContainer video:first-child:nth-last-child(1) ~ video,
-.myVideosContainer video:first-child:nth-last-child(1),
-.otherVideosContainer video:first-child:nth-last-child(1) ~ video {
+.videosContainer video:first-child:nth-last-child(1),
+.videosContainer video:first-child:nth-last-child(1) ~ video {
     width: 100%;
 }
 
-.myVideosContainer video:first-child:nth-last-child(2),
-.otherVideosContainer video:first-child:nth-last-child(2) ~ video,
-.myVideosContainer video:first-child:nth-last-child(2),
-.otherVideosContainer video:first-child:nth-last-child(2) ~ video  {
+.videosContainer video:first-child:nth-last-child(2),
+.videosContainer video:first-child:nth-last-child(2) ~ video {
     width: 50%;
 }
 
-.myVideosContainer video:first-child:nth-last-child(3),
-.otherVideosContainer video:first-child:nth-last-child(3) ~ video,
-.myVideosContainer video:first-child:nth-last-child(3),
-.otherVideosContainer video:first-child:nth-last-child(3) ~ video  {
+.videosContainer video:first-child:nth-last-child(3),
+.videosContainer video:first-child:nth-last-child(3) ~ video {
     width: 33.33333%;
 }
 
