@@ -176,31 +176,40 @@ $(function(){
         console.log("getStream : ");
         console.log(stream.getVideoTracks());
         const videoDom = $('<video autoplay>');
+        videoDom.attr('class','remoteVideo');
         videoDom.attr('id',stream.peerId);
         videoDom.get(0).srcObject = stream;
-        $('.videosContainer').append(videoDom);
-        // addActor(stream.id,stream);　//Add Anamorphico
-        // //ダイアログを表示　新しい参加者来ました。どのカメラを提示しますか？（カメラ選択画面とプレビュー,ボタン）
-        // $('#overlay').fadeIn("fast",function(){
-        //     $('#modalWindow').fadeIn("fast",function(){
-        //     console.log("deviceInfos_global");
-        //     console.log(deviceInfos_global);
-        //     for (var i = 0; i !== deviceInfos_global .length; ++i) {
-        //         var deviceInfo = deviceInfos_global [i];
-        //         var option = $('<option>');
-        //         option.val(deviceInfo.deviceId);
-        //         if (deviceInfo.kind === 'audioinput') {
-        //             option.text(deviceInfo.label);
-        //             addAnotherAudioSelect.append(option);
-        //         } else if (deviceInfo.kind === 'videoinput') {
-        //             option.text(deviceInfo.label);
-        //             addAnotherVideoSelect.append(option);
-        //         }
-        //     }
-        //     addAnotherAudioSelect.on('change', deviceChange);
-        //     addAnotherVideoSelect.on('change', deviceChange);
-        // });
-        // });
+        // $('.videosContainer').append(videoDom);
+
+
+         //remoteVideoとlocalVideoの組み合わせ作成、rocalだけのものがあればそれに入れるし、なければdivを新しく作って、id[PeerPare=xxxxxx]もつける
+        var singleHere = false;
+        $('.singleVideo').each(function(){ //for(#videoFieldの子要素(PeerPare=xxxxxx)を全探索){
+                console.log("find singleVideo");
+                console.log("this id  " + $(this).attr('id'));
+                if(!$(this).attr('id') && $(this).has(".localVideo")){ //idがない、「かつ、localVideosContainerをもっている」とできればもっといい
+                    console.log("find single in videosContainer");
+                    console.log("this class = " + $(this).attr('class') + ", id = " + $(this).attr('id'));
+                    $(this).append(videoDom);
+                    $(this).attr('id','PeerPare='+stream.peerId);
+                    $(this).attr('class','pairVideo');
+                    singleHere = true;
+                    console.log("this class = " + $(this).attr('class') + ", id = " + $(this).attr('id'));
+                    return true;
+                }
+        });
+        if(!singleHere){//シングルがいない場合、シングルをつくるdivに入れる.singleVideo
+            const singleVideo = $('<div></div>');
+            singleVideo.attr('class','singleVideo');
+            singleVideo.attr('id','PeerPare='+stream.peerId);
+            $('.videosContainer').append(singleVideo);
+            singleVideo.append(videoDom);
+
+            //相方localカメラを探す。
+            $('#overlay').fadeIn("fast",function(){
+                $('#modalWindow').fadeIn("fast");
+            });
+        }
 
     }
 
@@ -228,10 +237,42 @@ $(function(){
     }
 
     function addStream(){
-        console.log("addStream");
+        // const videoDom = $('<video autoplay>');
+        // videoDom.attr('class','localVideo');
+        // videoDom.get(0).srcObject = $('#streamPreview').get(0).srcObject;
+        // $('.videosContainer').append(videoDom);
 
+        // var stream = $('#streamPreview').get(0).srcObject;
+        // $('#streamPreview').get(0).srcObject = null;
+
+        const videoDom = $('<video autoplay>');
+        videoDom.attr('class','localVideo');
         var stream = $('#streamPreview').get(0).srcObject;
-        $('#streamPreview').get(0).srcObject = null;
+        videoDom.get(0).srcObject = stream;
+        // $('.localVideosContainer').append(videoDom);
+
+        //remoteVideoとlocalVideoの組み合わせ作成、remoteだけのものがあればそれに入れるし、なければdivを新しく作る
+        var singleHere = false;
+        $('.singleVideo').each(function(){ //for(#videoFieldの子要素(PeerPare=xxxxxx)を全探索){
+                if($(this).has(".remoteVideo")){ //remoteVideosContainerをもっている
+                    console.log("find single in videoContainer");
+                    console.log("this class = " + $(this).attr('class') + ", id = " + $(this).attr('id'));
+                    $(this).append(videoDom);
+                    $(this).attr('class','pairVideo');//.Singleclassというクラス名を消す
+                    singleHere = true;
+                    console.log("this class = " + $(this).attr('class') + ", id = " + $(this).attr('id'));
+                    return true;
+                }
+        });
+        if(!singleHere){//シングルがいない場合からのdivに入れる.singleVideo
+            const singleVideo = $('<div></div>');
+            singleVideo.attr('class','singleVideo');
+            $('.videosContainer').append(singleVideo);
+            singleVideo.append(videoDom);
+        }
+
+
+
 
         if(localStream){
             var audioTrack = stream.getAudioTracks();
@@ -239,10 +280,9 @@ $(function(){
             localStream.addTrack(audioTrack[0]);
             localStream.addTrack(videoTrack[0]);
         }else{
-            $('#myStream').get(0).srcObject = stream;
+            $('.localVideo').get(0).srcObject = stream;
             localStream = stream;
         }
-        $('#streamPreview').get(0).srcObject = null;
 
         if(existingCall){
             console.log("modal finish!");

@@ -3,17 +3,17 @@ extends layout
 block content
     link(rel='stylesheet', href='/stylesheets/localStyle.css')
     .videosContainer
-      video#myStream(autoplay='', muted='true')
+      //- video#myStream(autoplay='', muted='true')
     .myControllerContainer
       p
         | Your id:
         span#my-id ...
-      .select
-        label(for='audioSource') Audio input source:
-        select#audioSource
-      .select
-        label(for='videoSource') Video source:
-        select#videoSource
+      //- .select
+      //-   label(for='audioSource') Audio input source:
+      //-   select#audioSource
+      //- .select
+      //-   label(for='videoSource') Video source:
+      //-   select#videoSource
       form#make-call
         input#join-room(type='text', placeholder='Join room...')
         button(type='submit') Join

@@ -12,6 +12,46 @@ html {
     left: 0;
     top: 0; }
 
+.singleVideo{
+  position: relative;
+  width: 100%;
+  height: 50%;
+  padding : 20px ;
+  background-color: red;
+}
+.pairVideo{
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding : 20px ;
+  background-color: blue;
+}
+
+/*.pairDiv{
+  position: relative;
+  width: 20%;
+  height: 100%;
+  left:0;
+  top:0;
+}*/
+
+.localVideo{
+    position: relative;
+/*    width: 20%;
+    height: 20%;*/
+    left: 0;
+    top: 0;
+    z-index: 1;
+}
+
+.remoteVideo{
+/*    width: 50%;
+    height: 50%;*/
+    position: relative;
+    left: 0;
+    top: 0;
+}
+
 .myControllerContainer {
     position: absolute;
     width: 50%;
@@ -141,7 +181,7 @@ video {
   left: 0;
   background: rgba(0, 0, 0, 0.3);
   display: none;
-  z-index: 1
+  z-index: 2
  }
 
 #modalWindow {
@@ -151,7 +191,7 @@ video {
   border: 2px solid #D04255;
   background-color: #FFF;
   display: none;
-  z-index: 2
+  z-index: 3
 }
 
 #streamPreview {
