@@ -1,6 +1,7 @@
 extends layout
 
 block content
+
     .videosContainer
       video#myStream(autoplay='', muted='true')
     .myControllerContainer
@@ -38,3 +39,4 @@ block content
         br
         button#generate generate
         button#close Close
+    script(type='text/javascript', src='/javascripts/localVideoChat.js')
