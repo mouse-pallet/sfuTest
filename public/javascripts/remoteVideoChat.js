@@ -94,11 +94,31 @@ $(function(){
         $('#room-id').text(call.name);
 
         call.on('stream', function(stream){
+            console.log("replace発火!!!! on stream");
+            console.log(stream);
+            console.log(stream.getVideoTracks().length);
+            console.log("=====call");
+            console.log(call);
+            console.log("========");
+
             addVideo(stream);
         });
 
         call.on('removeStream', function(stream){
+            console.log("replace発火!!!! on removeStream");
+            console.log(stream);
             removeVideo(stream.peerId);
+        });
+
+        call.on('log', function(Log){
+            console.log("fire log");
+            console.log(Log);
+        });
+
+
+        call.on('peerJoin', function(peerId){
+            console.log(peerJoin)
+            console.log(peerId);
         });
 
         call.on('peerLeave', function(peerId){

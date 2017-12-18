@@ -152,10 +152,14 @@ $(function(){
         $('#room-id').text(call.name);
 
         call.on('stream', function(stream){
+            console.log("replace発火!!!! on stream");
+            console.log(stream);
             addVideo(stream);
         });
 
         call.on('removeStream', function(stream){
+            console.log("replace発火!!!! on removeStream");
+            console.log(stream);
             removeVideo(stream.peerId);
         });
 
@@ -223,9 +227,9 @@ $(function(){
         constraints.video.width = 320;
         constraints.video.height = 240;
 
-        if(localStream){
-            localStream = null;
-        }
+        // if(localStream){
+        //     localStream = null;
+        // }
 
         navigator.mediaDevices.getUserMedia(constraints)
             .then(function (stream) {
@@ -273,14 +277,17 @@ $(function(){
 
 
 
-
+        console.log("localStream" + localStream);
         if(localStream){
+            console.log("addTrack");
             var audioTrack = stream.getAudioTracks();
             var videoTrack = stream.getVideoTracks();
             localStream.addTrack(audioTrack[0]);
             localStream.addTrack(videoTrack[0]);
         }else{
-            $('.localVideo').get(0).srcObject = stream;
+
+            // $('.localVideo').get(0).srcObject = stream;
+            console.log("localStream cannot find. new one become localStream.");
             localStream = stream;
         }
 
@@ -289,6 +296,7 @@ $(function(){
             console.log(localStream.getAudioTracks());
             console.log(localStream.getVideoTracks());
             existingCall.replaceStream(localStream);
+            console.log(existingCall);
             $('#overlay, #modalWindow').fadeOut();
         }
         else{
