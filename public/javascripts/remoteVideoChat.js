@@ -116,11 +116,6 @@ $(function(){
         });
 
 
-        call.on('peerJoin', function(peerId){
-            console.log(peerJoin)
-            console.log(peerId);
-        });
-
         call.on('peerLeave', function(peerId){
             removeVideo(peerId);
         });
