@@ -22,6 +22,7 @@ block content
           | Currently in room
           span#room-id ...
         button Leave
+      button#add_person 対話者を追加
     #overlay
     #modalWindow
         | Gererate new Anamorphicon User
@@ -39,4 +40,5 @@ block content
         br
         button#generate generate
         button#close Close
+    script(type='text/javascript', src='/javascripts/personalVideo.js')
     script(type='text/javascript', src='/javascripts/localVideoChat.js')
