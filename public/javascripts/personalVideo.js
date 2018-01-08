@@ -7,18 +7,22 @@
 var personalVideo = function(){
     this.peer = new Peer({
     key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
-        debug: 3
+        debug: 3,
+         secure: true
     });
     this.call = null;
     this.existingCall = null;
+    console.log(this.peer);
     // this.streamFunc = null;
     // this.removeStreamFunc = null;
     // this.closeFunc = null
 
     //peer setting
     this.peer.on('open', function(){
-        // var pretext = $('#my-id').text();
-        // $('#my-id').text(pretext + " : " +peer.id);
+        var pretext = $('#my-id').text();
+        console.log(this);
+        $('#my-id').text(pretext + " : " +this.id);
+        // console.log("my Peer is " + this.peer.id);
     });
 
     this.peer.on('error', function(err){
@@ -49,48 +53,3 @@ personalVideo.prototype.getPeerID = function(){
     return this.peer.id;
 }
 
-// personalVideo.prototype.setCallStreamFunc= function(addRemoteStreamFunc){
-//     this.streamFunc = addRemoteStreamFunc;
-// }
-
-// personalVideo.prototype.setCallRemoveStreamFunc= function(addRemoveRemoteStreamFunc){
-//     this.removeStreamFunc = addRemoveRemoteStreamFunc;
-// }
-
-// personalVideo.prototype.setCallCloseFunc= function(addCloseStreamFunc){
-//     this.closeFunc = addCloseStreamFunc;
-// }
-
-// personalVideo.prototype.setupCallEventHandlers = function(){
-//         if (this.existingCall) {
-//             this.existingCall.close();
-//         };
-
-//         this.existingCall = this.call;
-//         // setupEndCallUI();
-//         // $('#room-id').text(call.name);
-
-//         call.on('stream', function(stream){
-//             console.log("replace発火!!!! on stream");
-//             // console.log(stream);
-//             // addVideo(stream);
-//             this.streamFunc(stream);
-//         });
-
-//         call.on('removeStream', function(stream){
-//             console.log("replace発火!!!! on removeStream");
-//             // console.log(stream);
-//             // removeVideo(stream.peerId);
-//             this.streamFunc(stream.peerId)
-//         });
-
-//         call.on('peerLeave', function(peerId){
-//             removeVideo(peerId);
-//         });
-
-//         call.on('close', function(){
-//             removeAllRemoteVideos();
-//             setupMakeCallUI();
-//         });
-
-//     }

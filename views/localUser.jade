@@ -14,9 +14,9 @@ block content
       //- .select
       //-   label(for='videoSource') Video source:
       //-   select#videoSource
-      form#make-call
-        input#join-room(type='text', placeholder='Join room...')
-        button(type='submit') Join
+      //- form#make-call
+      //-   input#join-room(type='text', placeholder='Join room...')
+      //-   button(type='submit') Join
       #end-call
         p
           | Currently in room
@@ -37,8 +37,9 @@ block content
           label(for='streamPreview') Preview:
           video#streamPreview(autoplay='', muted='true')
         p
+          input#join-room(type='text', placeholder='Join room...')
         br
-        button#generate generate
+        button#generate generate and JoinRoom
         button#close Close
     script(type='text/javascript', src='/javascripts/personalVideo.js')
     script(type='text/javascript', src='/javascripts/localVideoChat.js')

@@ -28,18 +28,19 @@ $(function(){
             return;
         });
 
-    peer = new Peer({
-        key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
-        debug: 3
-    });
+    // peer = new Peer({
+    //     key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
+    //     debug: 3
+    // });
+    var person = new personalVideo();
 
-    peer.on('open', function(){
-        $('#my-id').text(peer.id);
-    });
+    // peer.on('open', function(){
+    //     $('#my-id').text(peer.id);
+    // });
 
-    peer.on('error', function(err){
-        alert(err.message);
-    });
+    // peer.on('error', function(err){
+    //     alert(err.message);
+    // });
 
     $('#make-call').submit(function(e){
         e.preventDefault();
@@ -47,7 +48,9 @@ $(function(){
         if (!roomName) {
             return;
         }
-        const　call = peer.joinRoom(roomName, {mode: 'sfu', stream: localStream});
+        // const　call = peer.joinRoom(roomName, {mode: 'sfu', stream: localStream});
+        person.setStreamANDRoom(roomName, localStream);
+        const　call = person.getCall();
         setupCallEventHandlers(call);
     });
 
