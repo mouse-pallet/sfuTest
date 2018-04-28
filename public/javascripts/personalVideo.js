@@ -6,7 +6,7 @@
 // コンストラクタ
 var personalVideo = function(){
     this.peer = new Peer({
-    key: 'cf0497d0-c8c4-40fd-8d30-006bf1e17808',
+    key: '*********************',
         debug: 3,
          secure: true
     });
